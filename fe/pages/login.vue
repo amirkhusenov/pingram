@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+﻿<script lang="ts" setup>
   import type { FormSubmitEvent } from "@nuxt/ui"
   import { z } from "zod"
 
@@ -19,35 +19,43 @@
   async function onSubmit(event: FormSubmitEvent<Schema>) {
     await loginMutation.mutateAsync(event.data)
   }
+
   definePageMeta({
     layout: "auth",
   })
 </script>
 
 <template>
-  <UContainer class="flex flex-col justify-center items-center h-screen">
-    <h1 class="text-2xl font-bold">Вход</h1>
-    <UForm
-      class="flex flex-col space-y-4 items-center"
-      @submit="onSubmit"
-      :schema="schema"
-      :state="state"
-    >
-      <UFormField label="Почта" name="email">
-        <UInput v-model="state.email" class="w-[400px]" />
-      </UFormField>
-      <UFormField label="Пароль" name="password">
-        <UInput v-model="state.password" type="password" class="w-[400px]" />
-      </UFormField>
-
-      <ULink to="/register"> Нет аккаунта? Зарегистрироваться </ULink>
-      <UButton
-        :loading="loginMutation.isPending.value"
-        :disabled="loginMutation.isPending.value"
-        type="submit"
+  <UContainer class="auth-page">
+    <div class="auth-card">
+      <h1 class="auth-card__title">Вход</h1>
+      <UForm
+        class="auth-form"
+        @submit="onSubmit"
+        :schema="schema"
+        :state="state"
       >
-        Войти
-      </UButton>
-    </UForm>
+        <UFormField label="Почта" name="email">
+          <UInput v-model="state.email" class="auth-form__input" />
+        </UFormField>
+
+        <UFormField label="Пароль" name="password">
+          <UInput v-model="state.password" type="password" class="auth-form__input" />
+        </UFormField>
+
+        <ULink to="/register" class="auth-form__link">
+          Нет аккаунта? Зарегистрироваться
+        </ULink>
+
+        <UButton
+          class="auth-form__button"
+          :loading="loginMutation.isPending.value"
+          :disabled="loginMutation.isPending.value"
+          type="submit"
+        >
+          Войти
+        </UButton>
+      </UForm>
+    </div>
   </UContainer>
 </template>
