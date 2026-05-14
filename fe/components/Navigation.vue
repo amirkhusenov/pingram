@@ -36,7 +36,7 @@ function toggleMobileMenu() {
           <span class="topbar__profile-greeting">{{ authUser.name }}</span>
           <span class="topbar__profile-phone">{{ authUser.email }}</span>
         </div>
-        <NuxtLink to="/profile">
+        <NuxtLink to="/settings" aria-label="Open settings">
           <UAvatar :src="getAvatarUrl(authUser)" size="sm" />
         </NuxtLink>
       </div>

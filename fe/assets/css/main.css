@@ -176,6 +176,28 @@ a {
   font-size: 18px;
 }
 
+.settings-card--wide {
+  grid-column: 1 / -1;
+}
+
+.settings-profile {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.settings-profile__avatar {
+  border: 1px solid #2f3a56;
+  box-shadow: 0 10px 30px rgba(4, 8, 18, 0.4);
+}
+
+.settings-profile__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .settings-list {
   display: flex;
   flex-direction: column;
@@ -218,8 +240,16 @@ a {
   justify-content: flex-end;
 }
 
+.settings-actions--start {
+  justify-content: flex-start;
+}
+
 @media (max-width: 980px) {
   .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-profile {
     grid-template-columns: 1fr;
   }
 }
