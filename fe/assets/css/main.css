@@ -2,6 +2,7 @@
 @import "@nuxt/ui";
 
 :root {
+  --ui-base-font-size: 15px;
   --bg-main: #0b0f1a;
   --bg-surface: #171d2b;
   --bg-surface-2: #202739;
@@ -19,6 +20,10 @@ html,
 body,
 #__nuxt {
   min-height: 100%;
+}
+
+html {
+  font-size: var(--ui-base-font-size);
 }
 
 body {
@@ -59,7 +64,7 @@ a {
 .auth-card__title {
   margin: 0 0 14px;
   text-align: center;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -89,15 +94,15 @@ a {
 
 .app-shell {
   min-height: 100dvh;
-  padding: 0 22px 20px;
+  padding: 0 18px 16px;
 }
 
 .topbar {
-  height: 72px;
+  height: 66px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 18px;
   border-bottom: 1px solid #272e3f;
   background: #161c2a;
   border-radius: 0 0 16px 16px;
@@ -114,7 +119,7 @@ a {
 }
 
 .topbar__brand {
-  font-size: 30px;
+  font-size: 26px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -133,7 +138,7 @@ a {
   border: 1px solid transparent;
   border-radius: 12px;
   padding: 8px 12px;
-  font-size: 17px;
+  font-size: 15px;
   transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
@@ -202,7 +207,7 @@ a {
 
 .settings-page__header h1 {
   margin: 0;
-  font-size: 30px;
+  font-size: 26px;
 }
 
 .settings-page__header p {
@@ -306,10 +311,10 @@ a {
 }
 
 .app-body {
-  height: calc(100dvh - 92px);
+  height: calc(100dvh - 84px);
   margin-top: 14px;
   display: grid;
-  grid-template-columns: 470px minmax(0, 1fr);
+  grid-template-columns: 420px minmax(0, 1fr);
   gap: 12px;
   min-height: 0;
 }
@@ -401,7 +406,7 @@ a {
   background: #131a28;
   min-width: 0;
   display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  grid-template-columns: 200px minmax(0, 1fr);
   overflow: hidden;
 }
 
@@ -736,7 +741,7 @@ a {
 }
 
 .dialogs-item__name {
-  font-size: 17px;
+  font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -904,7 +909,7 @@ a {
 
 .chat-bubble__text {
   margin: 4px 0;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.35;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
@@ -1247,7 +1252,7 @@ a {
 
 @media (max-height: 860px) {
   .app-body {
-    height: calc(100dvh - 98px);
+    height: calc(100dvh - 90px);
   }
 
   .chat-shell__messages {
@@ -1514,7 +1519,7 @@ a {
 
 .default-screen__card h2 {
   margin: 12px 0 8px;
-  font-size: 24px;
+  font-size: 21px;
 }
 
 .default-screen__card p {

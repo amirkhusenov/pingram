@@ -1,14 +1,28 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+const AUTH_ROUTES = new Set(["/login", "/register"])
+
+export default defineNuxtRouteMiddleware(async (to) => {
   if (import.meta.server) return
 
-  const { refetch, data } = useUserProfile(to.name)
-  await refetch()
+  const isAuthRoute = AUTH_ROUTES.has(to.path)
+  const { refetch } = useUserProfile(to.name)
 
-  if (
-    data.value === undefined &&
-    to.path !== "/login" &&
-    to.path !== "/register"
-  ) {
+  const profileQueryResult = await refetch({ throwOnError: false })
+  const authenticatedUser = profileQueryResult.data?.user
+
+  if (authenticatedUser && isAuthRoute) {
+    return navigateTo("/")
+  }
+
+  if (authenticatedUser) {
+    return
+  }
+
+  if (isAuthRoute) {
+    return
+  }
+
+  const status = getHttpErrorStatus(profileQueryResult.error)
+  if (status === 401 || status === 403) {
     return navigateTo("/login")
   }
 })

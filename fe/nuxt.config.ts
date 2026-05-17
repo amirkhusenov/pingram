@@ -4,6 +4,16 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/ui", "@hebilicious/vue-query-nuxt", "@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
+  icon: {
+    provider: "server",
+    fallbackToApi: false,
+    serverBundle: {
+      collections: ["heroicons"],
+    },
+    clientBundle: {
+      scan: true,
+    },
+  },
   vueQuery: {
     // useState key used by nuxt for the vue query state.
     stateKey: "vue-query-nuxt", // default
