@@ -21,8 +21,5 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return
   }
 
-  const status = getHttpErrorStatus(profileQueryResult.error)
-  if (status === 401 || status === 403) {
-    return navigateTo("/login")
-  }
+  return navigateTo("/login")
 })

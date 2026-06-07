@@ -7,25 +7,6 @@ export interface UserResponse {
 
 export const USER_PROFILE_QUERY_KEY = ["userProfile"] as const
 
-type HttpErrorLike = {
-  status?: number
-  statusCode?: number
-  response?: {
-    status?: number
-  }
-}
-
-export const getHttpErrorStatus = (error: unknown): number | null => {
-  const normalizedError = error as HttpErrorLike | null
-
-  return (
-    normalizedError?.status ??
-    normalizedError?.statusCode ??
-    normalizedError?.response?.status ??
-    null
-  )
-}
-
 export const useUserProfile = (routeName: RouteRecordNameGeneric) => {
   const { callApi } = useApi()
 
