@@ -4,6 +4,14 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/ui", "@hebilicious/vue-query-nuxt", "@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
+  fonts: {
+    families: [
+      {
+        name: "Space Grotesk",
+        provider: "none",
+      },
+    ],
+  },
   icon: {
     provider: "server",
     fallbackToApi: false,
