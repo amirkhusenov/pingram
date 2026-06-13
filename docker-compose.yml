@@ -30,7 +30,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 8000
-      CLIENT_URL: https://pingram.xyz
+      CLIENT_URL: http://166.1.161.201
       JWT_SECRET: ${JWT_SECRET}
       DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
     volumes:
@@ -51,8 +51,8 @@ services:
       - server
     environment:
       NODE_ENV: production
-      NUXT_PUBLIC_API_BASE_URL: https://pingram.xyz/api
-      NUXT_PUBLIC_BACKEND_BASE_URL: https://pingram.xyz
+      NUXT_PUBLIC_API_BASE_URL: http://166.1.161.201/api
+      NUXT_PUBLIC_BACKEND_BASE_URL: http://166.1.161.201
     expose:
       - "3000"
     networks:
