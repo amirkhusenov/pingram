@@ -211,6 +211,65 @@ export const acceptFriendRequest = asyncHandler(
   }
 )
 
+export const removeFriend = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id
+    if (!userId) {
+      res.status(401).json({ error: "Unauthorized" })
+      return
+    }
+
+    const friendId = Number.parseInt(String(req.params.friendId), 10)
+    if (Number.isNaN(friendId)) {
+      res.status(400).json({ error: "Invalid friend id" })
+      return
+    }
+
+    const friendRequest = await prisma.friendRequest.findFirst({
+      where: {
+        status: FriendRequestStatus.ACCEPTED,
+        OR: [
+          { senderId: userId, receiverId: friendId },
+          { senderId: friendId, receiverId: userId },
+        ],
+      },
+    })
+
+    if (!friendRequest) {
+      res.status(404).json({ error: "Дружба не найдена" })
+      return
+    }
+
+    const currentUser = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { name: true },
+    })
+
+    await prisma.$transaction(async (ctx) => {
+      await ctx.notification.deleteMany({
+        where: { friendRequestId: friendRequest.id },
+      })
+
+      await ctx.friendRequest.delete({
+        where: { id: friendRequest.id },
+      })
+
+      await ctx.notification.create({
+        data: {
+          userId: friendId,
+          type: NotificationType.FRIEND_REMOVED,
+          message: `${currentUser?.name ?? "Пользователь"} удалил вас из друзей`,
+        },
+      })
+    })
+
+    const io = getIO()
+    emitToUser(io, friendId, "friendRemoved", { removedByUserId: userId })
+
+    res.status(200).json({ message: "Друг удалён" })
+  }
+)
+
 export const getFriends = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.user?.id

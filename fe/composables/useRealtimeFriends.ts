@@ -3,12 +3,17 @@ export const useRealtimeFriends = () => {
   const { $socket: socket } = useNuxtApp()
 
   onMounted(() => {
-    socket.on("newFriendAdded", (payload: any) => {
+    socket.on("newFriendAdded", () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
+      queryClient.invalidateQueries({ queryKey: ["notifications"] })
+    })
+    socket.on("friendRemoved", () => {
       queryClient.invalidateQueries({ queryKey: ["friends"] })
       queryClient.invalidateQueries({ queryKey: ["notifications"] })
     })
   })
   onBeforeUnmount(() => {
     socket.off("newFriendAdded")
+    socket.off("friendRemoved")
   })
 }

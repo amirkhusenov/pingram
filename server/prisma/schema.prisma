@@ -171,6 +171,7 @@ model ChatArchive {
 enum NotificationType {
   FRIEND_REQUEST
   FRIEND_REQUEST_ACCEPTED
+  FRIEND_REMOVED
   CHAT_CREATED // When a user is added to a chat
   CHAT_MESSAGE
 }

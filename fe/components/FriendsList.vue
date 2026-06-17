@@ -88,6 +88,36 @@ function startOneToOneChat(friend: User) {
   )
 }
 
+const removeFriendMutation = useMutation({
+  mutationFn: async (friendId: number) => {
+    await callApi<{ message: string }>(`/friend-request/friends/${friendId}`, {
+      method: "DELETE",
+      credentials: "include",
+    })
+  },
+})
+
+function removeFriend(friend: User) {
+  removeFriendMutation.mutate(friend.id, {
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["friends"] })
+      queryClient.invalidateQueries({ queryKey: ["notifications"] })
+      toast.add({
+        color: "success",
+        title: "Друг удалён",
+        description: `${friend.name} удалён из списка друзей`,
+      })
+    },
+    onError: (error: any) => {
+      toast.add({
+        color: "error",
+        title: "Ошибка",
+        description: error?.response?._data?.error || "Не удалось удалить друга",
+      })
+    },
+  })
+}
+
 const isModalOpen = ref(false)
 const preselectedFriends = ref<number[]>([])
 
@@ -214,6 +244,16 @@ function registerEl(el: Element | null) {
               @click="addFriendToGroupChat(friend)"
             >
               В группу
+            </UButton>
+            <UButton
+              size="xs"
+              color="error"
+              variant="soft"
+              icon="i-heroicons-user-minus"
+              :loading="removeFriendMutation.isPending.value"
+              @click="removeFriend(friend)"
+            >
+              Удалить
             </UButton>
           </div>
         </div>
