@@ -249,8 +249,22 @@ function getDropdownItems(chat: Chat) {
   return items
 }
 
-function toggleMenu(chatId: number) {
-  openMenuChatId.value = openMenuChatId.value === chatId ? null : chatId
+const menuStyle = ref<Record<string, string>>({})
+
+function toggleMenu(chatId: number, event?: MouseEvent) {
+  if (openMenuChatId.value === chatId) {
+    openMenuChatId.value = null
+    return
+  }
+  openMenuChatId.value = chatId
+  if (event) {
+    const btn = (event.currentTarget as HTMLElement)
+    const rect = btn.getBoundingClientRect()
+    const dropDown = rect.bottom + 200 > window.innerHeight
+    menuStyle.value = dropDown
+      ? { bottom: `${window.innerHeight - rect.top + 4}px`, right: `${window.innerWidth - rect.right}px` }
+      : { top: `${rect.bottom + 4}px`, right: `${window.innerWidth - rect.right}px` }
+  }
 }
 
 function closeMenu() {
@@ -344,13 +358,15 @@ function chatStateLabel(chat: Chat) {
                 mutatingChatId === chat.id ||
                 (chat.type === 'ONE_ON_ONE' && mutatingUserId === getOtherParticipant(chat)?.id)
               "
-              @click.stop.prevent="toggleMenu(chat.id)"
+              @click.stop.prevent="toggleMenu(chat.id, $event)"
               @pointerdown.stop.prevent
             />
 
+            <Teleport to="body">
             <div
               v-if="openMenuChatId === chat.id"
               class="dialogs-item__menu-popover"
+              :style="menuStyle"
               @click.stop
               @pointerdown.stop
             >
@@ -366,6 +382,7 @@ function chatStateLabel(chat: Chat) {
                 <span>{{ action.label }}</span>
               </button>
             </div>
+            </Teleport>
           </div>
         </div>
       </template>

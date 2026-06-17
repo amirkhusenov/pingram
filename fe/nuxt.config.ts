@@ -4,6 +4,10 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   modules: ["@nuxt/ui", "@hebilicious/vue-query-nuxt", "@pinia/nuxt"],
   css: ["~/assets/css/main.css"],
+  colorMode: {
+    preference: "dark",
+    fallback: "dark",
+  },
   fonts: {
     families: [
       {

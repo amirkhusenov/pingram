@@ -5,3 +5,9 @@
     </NuxtLayout>
   </UApp>
 </template>
+
+<script lang="ts" setup>
+onMounted(() => {
+  useAppSettings()
+})
+</script>
