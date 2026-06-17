@@ -110,8 +110,8 @@ a {
 
 .auth-form__button {
   width: 100%;
-  max-width: 430px;
   align-self: center;
+  justify-content: center;
 }
 
 .app-shell {
@@ -246,7 +246,6 @@ a {
 
 .settings-grid--single {
   grid-template-columns: minmax(0, 1fr);
-  max-width: 640px;
 }
 
 .settings-card {
