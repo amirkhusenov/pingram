@@ -95,22 +95,29 @@ async function fetchGifs() {
   isLoading.value = true
   errorText.value = ""
 
-  try {
-    let items = await fetchFromTenor()
-    if (items.length === 0) {
-      items = await fetchFromGiphy()
-    }
-    gifs.value = items
+  let items: PickerGif[] = []
 
-    if (items.length === 0 && !tenorApiKey && !giphyApiKey) {
-      errorText.value =
-        "Добавьте NUXT_PUBLIC_TENOR_API_KEY или NUXT_PUBLIC_GIPHY_API_KEY в .env.local"
-    }
-  } catch {
-    errorText.value = "Не удалось загрузить GIF. Проверьте API-ключ."
-  } finally {
-    isLoading.value = false
+  if (tenorApiKey) {
+    try {
+      items = await fetchFromTenor()
+    } catch {}
   }
+
+  if (items.length === 0 && giphyApiKey) {
+    try {
+      items = await fetchFromGiphy()
+    } catch {}
+  }
+
+  gifs.value = items
+
+  if (items.length === 0) {
+    errorText.value = !tenorApiKey && !giphyApiKey
+      ? "Добавьте NUXT_PUBLIC_TENOR_API_KEY или NUXT_PUBLIC_GIPHY_API_KEY в .env.local"
+      : "Не удалось загрузить GIF. Проверьте API-ключ."
+  }
+
+  isLoading.value = false
 }
 
 let searchTimer: ReturnType<typeof setTimeout> | null = null

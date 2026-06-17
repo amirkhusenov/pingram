@@ -6,6 +6,10 @@ COPY package.json bun.lock ./
 RUN npm i -g bun && bun install --frozen-lockfile
 
 FROM deps AS build
+ARG NUXT_PUBLIC_GIPHY_API_KEY=""
+ARG NUXT_PUBLIC_GIPHY_API_URL="https://api.giphy.com/v1/gifs"
+ENV NUXT_PUBLIC_GIPHY_API_KEY=$NUXT_PUBLIC_GIPHY_API_KEY
+ENV NUXT_PUBLIC_GIPHY_API_URL=$NUXT_PUBLIC_GIPHY_API_URL
 COPY . .
 RUN bun run build
 
