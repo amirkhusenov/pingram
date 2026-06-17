@@ -4,7 +4,7 @@
 
   const acceptFriendRequestMutation = useMutation({
     mutationFn: async (requestId: number) => {
-      callApi<{ message: string }>("/friend-request/accept", {
+      await callApi<{ message: string }>("/friend-request/accept", {
         method: "PUT",
         credentials: "include",
         body: { requestId },

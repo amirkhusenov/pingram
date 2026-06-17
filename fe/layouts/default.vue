@@ -1,5 +1,5 @@
 <template>
-  <div class="app-shell">
+  <div v-if="isReady" class="app-shell">
     <Navigation />
 
     <div class="app-body">
@@ -35,6 +35,9 @@
       </div>
     </Teleport>
   </div>
+  <div v-else class="app-loading">
+    <div class="app-loading__spinner" />
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -42,6 +45,10 @@ const socket = useNuxtApp().$socket
 const presenceStore = usePresenceStore()
 const route = useRoute()
 const mobileMenuOpen = useState<boolean>("mobile-menu-open", () => false)
+const routeName = route.name
+const userProfileQuery = useUserProfile(routeName)
+
+const isReady = computed(() => !!userProfileQuery.data.value?.user)
 
 useUseRealtimeFriendRequest()
 useRealtimeFriends()
@@ -58,6 +65,14 @@ function handleResize() {
   }
 }
 
+function initSocket() {
+  if (!socket.connected) {
+    socket.connect()
+  }
+  socket.emit("joinLobby")
+  presenceStore.initializePresence()
+}
+
 watch(
   () => route.fullPath,
   () => {
@@ -65,12 +80,16 @@ watch(
   }
 )
 
-onMounted(() => {
-  if (!socket.connected) {
-    socket.connect()
+watch(isReady, (ready) => {
+  if (ready) {
+    initSocket()
   }
-  socket.emit("joinLobby")
-  presenceStore.initializePresence()
+})
+
+onMounted(() => {
+  if (isReady.value) {
+    initSocket()
+  }
 
   handleResize()
   window.addEventListener("resize", handleResize)

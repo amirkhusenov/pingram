@@ -51,8 +51,8 @@ export default defineNuxtConfig({
       // Defaults for local development. Can be overridden by NUXT_PUBLIC_*.
       API_BASE_URL: "http://localhost:8000/api",
       BACKEND_BASE_URL: "http://localhost:8000",
-      TENOR_API_URL: "https://g.tenor.com/v1",
-      TENOR_API_KEY: "LIVDSRZULELA",
+      TENOR_API_URL: "https://tenor.googleapis.com/v2",
+      TENOR_API_KEY: "",
       GIPHY_API_URL: "https://api.giphy.com/v1/gifs",
       GIPHY_API_KEY: "",
     },

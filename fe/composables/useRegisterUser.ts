@@ -20,7 +20,7 @@ export const useRegisterUser = () => {
     onError: (error: any) => {
       toast.add({
         title: "Ошибка",
-        description: error.response._data.message,
+        description: error.response?._data?.error ?? "Не удалось зарегистрироваться",
         color: "error",
         icon: "i-heroicons-information-circle",
       })

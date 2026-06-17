@@ -92,13 +92,13 @@ let videoUploadPromise: Promise<Attachment | null> | null = null
 
 const canRecordVoice = computed(
   () =>
-    process.client &&
+    import.meta.client &&
     Boolean(navigator.mediaDevices?.getUserMedia) &&
     typeof MediaRecorder !== "undefined"
 )
 const canRecordVideo = computed(
   () =>
-    process.client &&
+    import.meta.client &&
     Boolean(navigator.mediaDevices?.getUserMedia) &&
     typeof MediaRecorder !== "undefined"
 )

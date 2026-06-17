@@ -50,7 +50,7 @@ function toggleMobileMenu() {
         @click="logout"
       />
       <NuxtLink v-else to="/login">
-        <UButton color="primary" size="xs">\u0412\u043e\u0439\u0442\u0438</UButton>
+        <UButton color="primary" size="xs">Войти</UButton>
       </NuxtLink>
     </div>
   </header>

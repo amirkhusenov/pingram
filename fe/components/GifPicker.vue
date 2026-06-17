@@ -1,21 +1,23 @@
-﻿<script lang="ts" setup>
+<script lang="ts" setup>
 type PickerGif = {
   id: string
   url: string
 }
 
-type TenorMediaV1 = {
-  gif?: { url?: string }
-  tinygif?: { url?: string }
+type TenorMediaFormat = {
+  url?: string
+  dims?: number[]
+  duration?: number
+  size?: number
 }
 
-type TenorResultV1 = {
+type TenorResultV2 = {
   id: string
-  media?: TenorMediaV1[]
+  media_formats?: Record<string, TenorMediaFormat>
 }
 
-type TenorResponseV1 = {
-  results?: TenorResultV1[]
+type TenorResponseV2 = {
+  results?: TenorResultV2[]
 }
 
 type GiphyResponse = {
@@ -44,25 +46,24 @@ const errorText = ref("")
 async function fetchFromTenor(): Promise<PickerGif[]> {
   if (!tenorApiKey) return []
 
-  const endpoint = searchTerm.value.trim() ? "search" : "trending"
-  const response = await $fetch<TenorResponseV1>(`${tenorApiUrl}/${endpoint}`, {
+  const endpoint = searchTerm.value.trim() ? "search" : "featured"
+  const response = await $fetch<TenorResponseV2>(`${tenorApiUrl}/${endpoint}`, {
     params: {
       key: tenorApiKey,
       q: searchTerm.value.trim() || undefined,
       limit: 24,
       locale: "ru_RU",
       contentfilter: "medium",
-      media_filter: "minimal",
-      ar_range: "standard",
+      media_filter: "tinygif,gif",
     },
   })
 
   return (response.results ?? [])
     .map((item) => {
-      const media = item.media?.[0]
+      const formats = item.media_formats
       return {
         id: item.id,
-        url: media?.tinygif?.url ?? media?.gif?.url ?? "",
+        url: formats?.tinygif?.url ?? formats?.gif?.url ?? "",
       }
     })
     .filter((item) => Boolean(item.url))

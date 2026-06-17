@@ -41,6 +41,27 @@ a {
   text-decoration: none;
 }
 
+.app-loading {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+}
+
+.app-loading__spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #2a3144;
+  border-top-color: var(--accent-lime);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .auth-page {
   min-height: 100dvh;
   display: grid;
@@ -88,8 +109,9 @@ a {
 }
 
 .auth-form__button {
+  width: 100%;
+  max-width: 430px;
   align-self: center;
-  min-width: 140px;
 }
 
 .app-shell {
@@ -220,6 +242,11 @@ a {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+}
+
+.settings-grid--single {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 640px;
 }
 
 .settings-card {

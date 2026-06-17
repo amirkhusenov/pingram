@@ -20,6 +20,7 @@ coverage/
 
 # Nuxt 3 build and generated folders for the frontend
 fe/.nuxt/
+fe/.output/
 fe/dist/
 
 # Environment variable files (ensure sensitive data stays local)

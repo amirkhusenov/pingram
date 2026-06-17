@@ -9,17 +9,16 @@ export const useUseLoginUser = () => {
 
   return useMutation({
     mutationFn: async (variables: LoginPayload) => {
-      await callApi<{ meesage: string }>("/login", {
+      await callApi<{ message: string }>("/login", {
         method: "POST",
         body: variables,
         credentials: "include",
       })
     },
     onError: (error: any) => {
-      console.log(error.response, error.response._data)
       toast.add({
         title: "Ошибка",
-        description: error.response._data.message,
+        description: error.response?._data?.error ?? "Не удалось войти",
         color: "error",
         icon: "i-heroicons-information-circle",
       })

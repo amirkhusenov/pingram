@@ -1,8 +1,17 @@
 import type { Request, Response, NextFunction } from "express"
 
 import jwt from "jsonwebtoken"
+import bcrypt from "bcryptjs"
 import prisma from "../../prisma/db"
 import { asyncHandler } from "../utils"
+
+const SALT_ROUNDS = 10
+
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+}
 
 export const registerUser = asyncHandler(
   async (
@@ -26,14 +35,17 @@ export const registerUser = asyncHandler(
       },
     })
     if (existingUser) {
-      res.status(400).json({ message: "User already exists" })
+      res.status(400).json({ error: "Пользователь с таким email уже существует" })
       return
     }
+
+    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS)
+
     const newUser = await prisma.user.create({
       data: {
         name,
         email,
-        password,
+        password: hashedPassword,
       },
     })
     const token = jwt.sign(
@@ -46,9 +58,7 @@ export const registerUser = asyncHandler(
       { expiresIn: "7days" }
     )
 
-    res.cookie("token", token, {
-      httpOnly: true,
-    })
+    res.cookie("token", token, cookieOptions)
     res.status(201).json({
       message: "User registered successfully",
     })
@@ -76,15 +86,13 @@ export const loginUser = asyncHandler(
       },
     })
     if (!existingUser) {
-      res
-        .status(400)
-        .json({ message: "You have probably provived a wrong email" })
+      res.status(400).json({ error: "Неверный email или пароль" })
       return
     }
 
-    const isMatch = existingUser.password === password
+    const isMatch = await bcrypt.compare(password, existingUser.password)
     if (!isMatch) {
-      res.status(400).json({ message: "Probably wrong password" })
+      res.status(400).json({ error: "Неверный email или пароль" })
       return
     }
     const token = jwt.sign(
@@ -97,9 +105,7 @@ export const loginUser = asyncHandler(
       { expiresIn: "7days" }
     )
 
-    res.cookie("token", token, {
-      httpOnly: true,
-    })
+    res.cookie("token", token, cookieOptions)
 
     res.status(200).json({
       message: "User logged in successfully",
