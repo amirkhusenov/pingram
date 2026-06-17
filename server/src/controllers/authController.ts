@@ -10,7 +10,7 @@ const SALT_ROUNDS = 10
 const cookieOptions = {
   httpOnly: true,
   sameSite: "lax" as const,
-  secure: process.env.NODE_ENV === "production",
+  secure: process.env.COOKIE_SECURE === "true",
 }
 
 export const registerUser = asyncHandler(
