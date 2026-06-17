@@ -90,7 +90,16 @@ export const loginUser = asyncHandler(
       return
     }
 
-    const isMatch = await bcrypt.compare(password, existingUser.password)
+    const isHashed = existingUser.password.startsWith("$2a$") || existingUser.password.startsWith("$2b$")
+    const isMatch = isHashed
+      ? await bcrypt.compare(password, existingUser.password)
+      : password === existingUser.password
+
+    if (isMatch && !isHashed) {
+      const hashed = await bcrypt.hash(password, SALT_ROUNDS)
+      await prisma.user.update({ where: { id: existingUser.id }, data: { password: hashed } })
+    }
+
     if (!isMatch) {
       res.status(400).json({ error: "Неверный email или пароль" })
       return
